@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://cfnpu5g53ks5x"]
+
+[ext_resource type="PackedScene" uid="uid://lw368o7usfb3" path="res://spring.tscn" id="2_fqe1h"]
+
+[sub_resource type="GDScript" id="GDScript_lcx51"]
+script/source = "extends Node2D
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdlyj"]
+
+[sub_resource type="Gradient" id="Gradient_2fcfj"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4c2x2"]
+gradient = SubResource("Gradient_2fcfj")
+
+[node name="Vehicle" type="Node2D"]
+script = SubResource("GDScript_lcx51")
+
+[node name="Body" type="RigidBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
+scale = Vector2(3.2, 3.2)
+shape = SubResource("RectangleShape2D_jdlyj")
+
+[node name="Sprite2D" type="Sprite2D" parent="Body"]
+texture = SubResource("GradientTexture2D_4c2x2")
+
+[node name="Spring" parent="Body" instance=ExtResource("2_fqe1h")]
