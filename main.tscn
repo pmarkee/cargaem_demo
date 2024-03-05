@@ -1,12 +1,31 @@
-[gd_scene load_steps=3 format=3 uid="uid://clxil1s2fl2l0"]
+[gd_scene load_steps=6 format=3 uid="uid://clxil1s2fl2l0"]
 
 [ext_resource type="PackedScene" uid="uid://cfnpu5g53ks5x" path="res://vehicle.tscn" id="1_cpo2i"]
 [ext_resource type="PackedScene" uid="uid://cjjbplfkq48xu" path="res://ground.tscn" id="2_idnqu"]
 
+[sub_resource type="Gradient" id="Gradient_b1orj"]
+offsets = PackedFloat32Array(0, 0.283871, 0.580645, 0.812903, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.124444, 0.124444, 0.124444, 1, 0.180645, 0.180645, 0.180645, 1, 0.634442, 0.634442, 0.634442, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wmxre"]
+gradient = SubResource("Gradient_b1orj")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n1wb6"]
+
 [node name="Main" type="Node2D"]
 
-[node name="Ground" parent="." instance=ExtResource("2_idnqu")]
-position = Vector2(593, 615)
+[node name="Level" parent="." instance=ExtResource("2_idnqu")]
 
 [node name="Vehicle" parent="." instance=ExtResource("1_cpo2i")]
-position = Vector2(595, 154)
+position = Vector2(366, 88)
+
+[node name="Obstacle" type="StaticBody2D" parent="."]
+position = Vector2(898, 309)
+
+[node name="Sprite2D" type="Sprite2D" parent="Obstacle"]
+scale = Vector2(1.19999, 0.366966)
+texture = SubResource("GradientTexture2D_wmxre")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle"]
+scale = Vector2(3.84, 1.16001)
+shape = SubResource("RectangleShape2D_n1wb6")

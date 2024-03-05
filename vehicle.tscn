@@ -1,12 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://cfnpu5g53ks5x"]
 
+[ext_resource type="Script" path="res://vehicle.gd" id="1_nb3ov"]
 [ext_resource type="PackedScene" uid="uid://lw368o7usfb3" path="res://spring.tscn" id="2_fqe1h"]
 
-[sub_resource type="GDScript" id="GDScript_lcx51"]
-script/source = "extends Node2D
-"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jdlyj"]
+size = Vector2(20.1327, 20)
 
 [sub_resource type="Gradient" id="Gradient_2fcfj"]
 
@@ -14,15 +12,27 @@ script/source = "extends Node2D
 gradient = SubResource("Gradient_2fcfj")
 
 [node name="Vehicle" type="Node2D"]
-script = SubResource("GDScript_lcx51")
+script = ExtResource("1_nb3ov")
 
 [node name="Body" type="RigidBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
-scale = Vector2(3.2, 3.2)
+position = Vector2(-4.32134e-06, 0)
+scale = Vector2(9.04001, 3.2)
 shape = SubResource("RectangleShape2D_jdlyj")
 
 [node name="Sprite2D" type="Sprite2D" parent="Body"]
+position = Vector2(1.19209e-07, 0)
+scale = Vector2(2.84375, 1)
 texture = SubResource("GradientTexture2D_4c2x2")
 
-[node name="Spring" parent="Body" instance=ExtResource("2_fqe1h")]
+[node name="RearSpring" parent="Body" instance=ExtResource("2_fqe1h")]
+position = Vector2(-70, 0)
+
+[node name="FrontSpring" parent="Body" instance=ExtResource("2_fqe1h")]
+position = Vector2(70, 0)
+
+[node name="GroundContactRayCast" type="RayCast2D" parent="Body"]
+target_position = Vector2(0, 100)
+
+[node name="Camera2D" type="Camera2D" parent="Body"]
