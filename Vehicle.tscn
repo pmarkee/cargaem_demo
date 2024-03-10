@@ -29,6 +29,6 @@ scale = Vector2(2.84375, 1)
 texture = SubResource("GradientTexture2D_4c2x2")
 
 [node name="GroundContactRayCast" type="RayCast2D" parent="Body"]
-target_position = Vector2(0, 100)
+target_position = Vector2(0, 200)
 
 [node name="Camera2D" type="Camera2D" parent="Body"]

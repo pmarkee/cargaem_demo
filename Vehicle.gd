@@ -3,7 +3,12 @@ extends Node2D
 const ACCELERATION_FORCE = 500
 const BRAKING_FORCE = 700
 
-enum SuspensionVariant {V1_SINGLERAY, V1_MULTIRAY_ANGLE, V1_MULTIRAY_PARALLEL}
+enum SuspensionVariant {
+	V1_SINGLERAY,
+	V1_MULTIRAY_ANGLE,
+	V1_MULTIRAY_PARALLEL,
+	V2_SINGLERAY
+}
 
 @export var variant = SuspensionVariant.V1_SINGLERAY
 @export var wheelbase = 70
@@ -17,6 +22,8 @@ func _ready():
 		scene_to_load = "res://Wheel_v1_multiray_parallel.tscn"
 	elif variant == SuspensionVariant.V1_MULTIRAY_ANGLE:
 		scene_to_load = "res://Wheel_v1_multiray_angle.tscn"
+	elif variant == SuspensionVariant.V2_SINGLERAY:
+		scene_to_load = "res://Wheel_v2_singleray.tscn"
 	
 	var wheel_scene = load(scene_to_load)
 	var FrontWheel = wheel_scene.instantiate()
