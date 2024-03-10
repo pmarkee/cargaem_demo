@@ -33,31 +33,39 @@ texture = SubResource("GradientTexture2D_4c2x2")
 position = Vector2(-70, 0)
 
 [node name="RearSpring2" parent="Body" instance=ExtResource("2_fqe1h")]
-position = Vector2(-76, 0)
+position = Vector2(-70, 0)
+rotation = 0.0523599
 
 [node name="RearSpring3" parent="Body" instance=ExtResource("2_fqe1h")]
-position = Vector2(-82, 0)
+position = Vector2(-70, 0)
+rotation = 0.10472
 
 [node name="RearSpring4" parent="Body" instance=ExtResource("2_fqe1h")]
-position = Vector2(-64, 0)
+position = Vector2(-70, 0)
+rotation = -0.0523599
 
 [node name="RearSpring5" parent="Body" instance=ExtResource("2_fqe1h")]
-position = Vector2(-58, 0)
+position = Vector2(-70, -4.76837e-07)
+rotation = -0.10472
 
 [node name="FrontSpring" parent="Body" instance=ExtResource("2_fqe1h")]
 position = Vector2(70, 0)
 
 [node name="FrontSpring2" parent="Body" instance=ExtResource("2_fqe1h")]
-position = Vector2(76, 0)
+position = Vector2(70, 0)
+rotation = -0.0523599
 
 [node name="FrontSpring3" parent="Body" instance=ExtResource("2_fqe1h")]
-position = Vector2(82, 0)
+position = Vector2(70, 0)
+rotation = -0.10472
 
 [node name="FrontSpring4" parent="Body" instance=ExtResource("2_fqe1h")]
-position = Vector2(64, 0)
+position = Vector2(70, 0)
+rotation = 0.0523599
 
 [node name="FrontSpring5" parent="Body" instance=ExtResource("2_fqe1h")]
-position = Vector2(58, 0)
+position = Vector2(70, -4.76837e-07)
+rotation = 0.10472
 
 [node name="GroundContactRayCast" type="RayCast2D" parent="Body"]
 target_position = Vector2(0, 100)

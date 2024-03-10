@@ -5,6 +5,7 @@ const BRAKING_FORCE = 700
 
 
 func _physics_process(delta):
+	print($Body.linear_velocity)
 	if !$Body/GroundContactRayCast.is_colliding():
 		# This ray cast is a stupid way of detecting ground contact but it will do
 		# We should detect ground contact of each wheel: ground distance <= wheel radius + spring max len
