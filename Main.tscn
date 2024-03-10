@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://clxil1s2fl2l0"]
 
-[ext_resource type="PackedScene" uid="uid://cfnpu5g53ks5x" path="res://vehicle.tscn" id="1_cpo2i"]
-[ext_resource type="PackedScene" uid="uid://cjjbplfkq48xu" path="res://ground.tscn" id="2_idnqu"]
+[ext_resource type="PackedScene" uid="uid://cjjbplfkq48xu" path="res://Ground.tscn" id="1_uxu8w"]
+[ext_resource type="PackedScene" uid="uid://cfnpu5g53ks5x" path="res://Vehicle.tscn" id="2_yae0x"]
 
 [sub_resource type="Gradient" id="Gradient_b1orj"]
 offsets = PackedFloat32Array(0, 0.283871, 0.580645, 0.812903, 1)
@@ -14,9 +14,9 @@ gradient = SubResource("Gradient_b1orj")
 
 [node name="Main" type="Node2D"]
 
-[node name="Level" parent="." instance=ExtResource("2_idnqu")]
+[node name="Level" parent="." instance=ExtResource("1_uxu8w")]
 
-[node name="Vehicle" parent="." instance=ExtResource("1_cpo2i")]
+[node name="Vehicle" parent="." instance=ExtResource("2_yae0x")]
 position = Vector2(366, 88)
 
 [node name="Obstacle" type="StaticBody2D" parent="."]

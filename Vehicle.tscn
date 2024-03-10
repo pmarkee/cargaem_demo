@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://cfnpu5g53ks5x"]
+
+[ext_resource type="Script" path="res://Vehicle.gd" id="1_2abnv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdlyj"]
+size = Vector2(20.1327, 20)
+
+[sub_resource type="Gradient" id="Gradient_2fcfj"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4c2x2"]
+gradient = SubResource("Gradient_2fcfj")
+
+[node name="Vehicle" type="Node2D"]
+script = ExtResource("1_2abnv")
+
+[node name="Body" type="RigidBody2D" parent="."]
+mass = 2.0
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, 5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
+position = Vector2(-4.32134e-06, 0)
+scale = Vector2(9.04001, 3.2)
+shape = SubResource("RectangleShape2D_jdlyj")
+
+[node name="Sprite2D" type="Sprite2D" parent="Body"]
+position = Vector2(1.19209e-07, 0)
+scale = Vector2(2.84375, 1)
+texture = SubResource("GradientTexture2D_4c2x2")
+
+[node name="GroundContactRayCast" type="RayCast2D" parent="Body"]
+target_position = Vector2(0, 100)
+
+[node name="Camera2D" type="Camera2D" parent="Body"]

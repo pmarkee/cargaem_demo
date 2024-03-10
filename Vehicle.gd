@@ -3,9 +3,31 @@ extends Node2D
 const ACCELERATION_FORCE = 500
 const BRAKING_FORCE = 700
 
+enum SuspensionVariant {V1_SINGLERAY, V1_MULTIRAY_ANGLE, V1_MULTIRAY_PARALLEL}
+
+@export var variant = SuspensionVariant.V1_SINGLERAY
+@export var wheelbase = 70
+
+
+func _ready():
+	var scene_to_load = ""
+	if variant == SuspensionVariant.V1_SINGLERAY:
+		scene_to_load = "res://Wheel_v1_singleray.tscn"
+	elif variant == SuspensionVariant.V1_MULTIRAY_PARALLEL:
+		scene_to_load = "res://Wheel_v1_multiray_parallel.tscn"
+	elif variant == SuspensionVariant.V1_MULTIRAY_ANGLE:
+		scene_to_load = "res://Wheel_v1_multiray_angle.tscn"
+	
+	var wheel_scene = load(scene_to_load)
+	var FrontWheel = wheel_scene.instantiate()
+	FrontWheel.position.x = wheelbase
+	var RearWheel = wheel_scene.instantiate()
+	RearWheel.position.x = -wheelbase
+	$Body.add_child(FrontWheel)
+	$Body.add_child(RearWheel)
+
 
 func _physics_process(delta):
-	print($Body.linear_velocity)
 	if !$Body/GroundContactRayCast.is_colliding():
 		# This ray cast is a stupid way of detecting ground contact but it will do
 		# We should detect ground contact of each wheel: ground distance <= wheel radius + spring max len

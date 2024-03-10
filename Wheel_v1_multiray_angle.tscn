@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://4276j8pw0biv"]
+
+[ext_resource type="PackedScene" uid="uid://lw368o7usfb3" path="res://Spring.tscn" id="1_mfs3a"]
+[ext_resource type="Script" path="res://Wheel.gd" id="1_r2slm"]
+
+[node name="Wheel" type="Node2D"]
+script = ExtResource("1_r2slm")
+
+[node name="Spring" parent="." instance=ExtResource("1_mfs3a")]
+
+[node name="Spring2" parent="." instance=ExtResource("1_mfs3a")]
+rotation = 0.0523599
+
+[node name="Spring3" parent="." instance=ExtResource("1_mfs3a")]
+rotation = 0.10472
+
+[node name="Spring4" parent="." instance=ExtResource("1_mfs3a")]
+rotation = -0.0523599
+
+[node name="Spring5" parent="." instance=ExtResource("1_mfs3a")]
+rotation = -0.10472

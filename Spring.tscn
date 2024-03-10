@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://lw368o7usfb3"]
+
+[ext_resource type="Script" path="res://Spring.gd" id="1_6obg4"]
+
+[node name="Spring" type="RayCast2D"]
+script = ExtResource("1_6obg4")

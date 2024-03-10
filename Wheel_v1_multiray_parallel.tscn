@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://1unuw0g1lg10"]
+
+[ext_resource type="Script" path="res://Wheel.gd" id="1_0kaw2"]
+[ext_resource type="PackedScene" uid="uid://lw368o7usfb3" path="res://Spring.tscn" id="2_dlqhl"]
+
+[node name="Wheel" type="Node2D"]
+script = ExtResource("1_0kaw2")
+
+[node name="Spring" parent="." instance=ExtResource("2_dlqhl")]
+
+[node name="Spring2" parent="." instance=ExtResource("2_dlqhl")]
+position = Vector2(6, 0)
+
+[node name="Spring3" parent="." instance=ExtResource("2_dlqhl")]
+position = Vector2(12, 0)
+
+[node name="Spring4" parent="." instance=ExtResource("2_dlqhl")]
+position = Vector2(-6, 0)
+
+[node name="Spring5" parent="." instance=ExtResource("2_dlqhl")]
+position = Vector2(-12, 0)
