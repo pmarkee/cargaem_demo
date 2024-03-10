@@ -1,7 +1,7 @@
 extends Node2D
 
-@export var stiffness = 5000
-@export var damping = 500
+@export var stiffness = 1000
+@export var damping = 400
 @export var rest_distance = 100
 
 var offset = 0

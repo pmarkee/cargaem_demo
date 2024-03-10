@@ -15,6 +15,9 @@ gradient = SubResource("Gradient_2fcfj")
 script = ExtResource("1_nb3ov")
 
 [node name="Body" type="RigidBody2D" parent="."]
+mass = 2.0
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, 5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
 position = Vector2(-4.32134e-06, 0)
@@ -29,8 +32,32 @@ texture = SubResource("GradientTexture2D_4c2x2")
 [node name="RearSpring" parent="Body" instance=ExtResource("2_fqe1h")]
 position = Vector2(-70, 0)
 
+[node name="RearSpring2" parent="Body" instance=ExtResource("2_fqe1h")]
+position = Vector2(-76, 0)
+
+[node name="RearSpring3" parent="Body" instance=ExtResource("2_fqe1h")]
+position = Vector2(-82, 0)
+
+[node name="RearSpring4" parent="Body" instance=ExtResource("2_fqe1h")]
+position = Vector2(-64, 0)
+
+[node name="RearSpring5" parent="Body" instance=ExtResource("2_fqe1h")]
+position = Vector2(-58, 0)
+
 [node name="FrontSpring" parent="Body" instance=ExtResource("2_fqe1h")]
 position = Vector2(70, 0)
+
+[node name="FrontSpring2" parent="Body" instance=ExtResource("2_fqe1h")]
+position = Vector2(76, 0)
+
+[node name="FrontSpring3" parent="Body" instance=ExtResource("2_fqe1h")]
+position = Vector2(82, 0)
+
+[node name="FrontSpring4" parent="Body" instance=ExtResource("2_fqe1h")]
+position = Vector2(64, 0)
+
+[node name="FrontSpring5" parent="Body" instance=ExtResource("2_fqe1h")]
+position = Vector2(58, 0)
 
 [node name="GroundContactRayCast" type="RayCast2D" parent="Body"]
 target_position = Vector2(0, 100)
