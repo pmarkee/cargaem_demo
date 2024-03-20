@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cfnpu5g53ks5x"]
+[gd_scene load_steps=6 format=3 uid="uid://cfnpu5g53ks5x"]
 
 [ext_resource type="Script" path="res://Vehicle.gd" id="1_2abnv"]
+[ext_resource type="PackedScene" uid="uid://cv5ig5f631anu" path="res://Engine.tscn" id="2_02oaa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jdlyj"]
 size = Vector2(20.1327, 20)
@@ -32,3 +33,5 @@ texture = SubResource("GradientTexture2D_4c2x2")
 target_position = Vector2(0, 200)
 
 [node name="Camera2D" type="Camera2D" parent="Body"]
+
+[node name="Engine" parent="." instance=ExtResource("2_02oaa")]

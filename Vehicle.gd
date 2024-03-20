@@ -1,7 +1,15 @@
 extends Node2D
 
-const ACCELERATION_FORCE = 500
 const BRAKING_FORCE = 700
+const PX_PER_M = 50
+
+# Engine parameters
+@export var MOMENT_OF_INERTIA = 1.0
+@export var DRAG_COEFFICIENT = 0.5
+@export var ROLLING_RESISTANCE = 10
+@export var RPM_LIMIT = 6000
+
+var throttle = 0.0
 
 enum SuspensionVariant {
 	V1_SINGLERAY,
@@ -12,6 +20,7 @@ enum SuspensionVariant {
 
 @export var variant = SuspensionVariant.V1_SINGLERAY
 @export var wheelbase = 70
+@export var wheel_radius = 31 # TODO make sure it's consistent here and in suspension
 
 
 func _ready():
@@ -40,22 +49,20 @@ func _physics_process(delta):
 		# We should detect ground contact of each wheel: ground distance <= wheel radius + spring max len
 		return
 
-	var force = Vector2.ZERO
 	if Input.is_action_pressed("ui_right"):
-		force.x += ACCELERATION_FORCE
+		throttle = 1.0
+	else:
+		throttle = 0.0
+
+	var engine_torque = $Engine.get_torque(throttle)
+	$Engine.apply_load(engine_torque, 10 + $Body.linear_velocity.x * 0.1, delta) # TODO calculate load instead of constant
+	var force = Vector2(engine_torque * PX_PER_M / wheel_radius, 0)
+
+	# TODO braking
 	if Input.is_action_pressed("ui_select"):
 		force.x -= sgn($Body.linear_velocity.x) * BRAKING_FORCE
-	
-	var torque = 0.0
-	if force.x > 0:
-		# Accelerating - apply counter clockwise torque, lifting the front
-		torque -= 50000
-	elif force.x < 0:
-		# Braking - apply clockwise torque, lifting the rear
-		torque += 70000
 
 	$Body.apply_force(force)
-	$Body.apply_torque(torque)
 
 
 func sgn(n: float) -> int:
