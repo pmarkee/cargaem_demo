@@ -15,7 +15,7 @@ gradient = SubResource("Gradient_2fcfj")
 script = ExtResource("1_2abnv")
 
 [node name="Body" type="RigidBody2D" parent="."]
-mass = 2.0
+mass = 990.0
 center_of_mass_mode = 1
 center_of_mass = Vector2(0, 5)
 

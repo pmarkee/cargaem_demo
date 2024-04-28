@@ -3,12 +3,6 @@ extends Node2D
 const BRAKING_FORCE = 700
 const PX_PER_M = 50
 
-# Engine parameters
-@export var MOMENT_OF_INERTIA = 1.0
-@export var DRAG_COEFFICIENT = 0.5
-@export var ROLLING_RESISTANCE = 10
-@export var RPM_LIMIT = 6000
-
 var throttle = 0.0
 
 enum SuspensionVariant {
@@ -54,15 +48,25 @@ func _physics_process(delta):
 	else:
 		throttle = 0.0
 
-	var engine_torque = $Engine.get_torque(throttle)
-	$Engine.apply_load(engine_torque, 10 + $Body.linear_velocity.x * 0.1, delta) # TODO calculate load instead of constant
-	var force = Vector2(engine_torque * PX_PER_M / wheel_radius, 0)
+	if Input.is_action_just_pressed("ui_up"):
+		$Engine.upshift()
+	elif Input.is_action_just_pressed("ui_down"):
+		$Engine.downshift()
+
+	var external_load = 0 # TODO calculate resistances properly
+	var engine_work = $Engine.get_work(throttle, external_load, delta)
+	var new_velocity = sqrt(2 * engine_work / $Body.mass) * PX_PER_M # Transforming 1/2 * m * v^2
+	var acceleration = (new_velocity - $Body.linear_velocity.x) / delta
+	# TODO how to take wheel radius into account here?
+	# TODO convert meters to pixels
+	var force = Vector2($Body.mass * acceleration, 0)
 
 	# TODO braking
 	if Input.is_action_pressed("ui_select"):
 		force.x -= sgn($Body.linear_velocity.x) * BRAKING_FORCE
 
 	$Body.apply_force(force)
+	print("v = ", $Body.linear_velocity.x / PX_PER_M)
 
 
 func sgn(n: float) -> int:
