@@ -18,7 +18,6 @@ gradient = SubResource("Gradient_b1orj")
 
 [node name="Vehicle" parent="." instance=ExtResource("2_yae0x")]
 position = Vector2(366, 88)
-variant = 2
 
 [node name="Obstacle" type="StaticBody2D" parent="."]
 position = Vector2(898, 309)

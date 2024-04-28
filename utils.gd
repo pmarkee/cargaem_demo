@@ -19,3 +19,11 @@ static func read_torque_curve(path) -> Dictionary:
 		#data["rpm_values"][i] = int(data["rpm_values"][i])
 
 	return data
+
+
+static func rpm_to_rad_per_sec(rpm: float) -> float:
+	return rpm * 2 * PI / 60
+
+
+static func rad_per_sec_to_rpm(omega: float) -> float:
+	return omega * 60 / (2 * PI)

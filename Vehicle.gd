@@ -14,7 +14,7 @@ enum SuspensionVariant {
 
 @export var variant = SuspensionVariant.V1_SINGLERAY
 @export var wheelbase = 70
-@export var wheel_radius = 31 # TODO make sure it's consistent here and in suspension
+@export var wheel_radius = 0.4 * PX_PER_M # TODO make sure it's consistent here and in suspension
 
 
 func _ready():
@@ -53,12 +53,11 @@ func _physics_process(delta):
 	elif Input.is_action_just_pressed("ui_down"):
 		$Engine.downshift()
 
-	var external_load = 0 # TODO calculate resistances properly
-	var engine_work = $Engine.get_work(throttle, external_load, delta)
-	var new_velocity = sqrt(2 * engine_work / $Body.mass) * PX_PER_M # Transforming 1/2 * m * v^2
+	var external_load = 50 # TODO calculate resistances properly
+	$Engine.update_engine_state(throttle, external_load, delta)
+
+	var new_velocity = $Engine.wheel_omega() * wheel_radius
 	var acceleration = (new_velocity - $Body.linear_velocity.x) / delta
-	# TODO how to take wheel radius into account here?
-	# TODO convert meters to pixels
 	var force = Vector2($Body.mass * acceleration, 0)
 
 	# TODO braking
@@ -66,7 +65,22 @@ func _physics_process(delta):
 		force.x -= sgn($Body.linear_velocity.x) * BRAKING_FORCE
 
 	$Body.apply_force(force)
-	print("v = ", $Body.linear_velocity.x / PX_PER_M)
+	
+	var engine_work = $Engine.power() * delta
+	var velocity_mps = $Body.linear_velocity.x / PX_PER_M
+
+	var kinetic_e = $Body.mass / 2 * pow(velocity_mps, 2)
+	var new_kinetic_e = $Body.mass / 2 * pow(new_velocity / PX_PER_M, 2)
+
+	#print("wheel omega: ", $Engine.wheel_omega())
+	#print("new_velocity kph: ", new_velocity / PX_PER_M * 3.6)
+	#print("force: ", force / PX_PER_M)
+	#print("v kph = ", velocity_mps * 3.6)
+	print("current E: ", kinetic_e)
+	print("engine work (J): ", engine_work)
+	print("predicted E based on target velocity: ", new_kinetic_e)
+	print("predicted E based on engine work: ", kinetic_e + engine_work)
+	print("-----------")
 
 
 func sgn(n: float) -> int:

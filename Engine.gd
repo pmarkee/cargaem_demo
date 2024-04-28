@@ -1,19 +1,21 @@
 extends Node2D
 
+var utils = load("res://utils.gd")
+
+ # TODO read these dynamically
 const MOMENT_OF_INERTIA = 0.1
+const final_drive = 4.25
+const gear_ratios = [3.25, 1.909, 1.25, 0.909, 0.75]
 
 @export_file var engine_file = "res://assets/engine/data.json"
 
-@onready var rpm: float = 1000
+var omega: float = utils.rpm_to_rad_per_sec(1000)
+var tq: float = 0
 
-var utils = load("res://utils.gd")
 var torque_curve: Dictionary
 var rpm_limit: int
 
-var final_drive_ratio = 4.25
-
 var current_gear: int = 0
-const gear_ratios = [3.25, 1.909, 1.25, 0.909, 0.75]
 
 
 func _ready():
@@ -25,36 +27,30 @@ func _ready():
 throttle: throttle position between 0 and 1
 external_load: resistance torque in Nm
 delta: time elapsed since last physics update in seconds
-Returns amount of effective work done by the engine in delta time and updates engine speed.
+Returns an object containing the new speed and torque output of the engine.
 '''
-func get_work(throttle: float, external_load: float, delta: float) -> float:
-	var tq = _calculate_torque(torque_curve, rpm, throttle) # Torque in Nm.
-	var net_tq = (tq - external_load) * gear_ratios[current_gear] * final_drive_ratio
-	var power = _calculate_power(net_tq, rpm) # Power in Watts
-	var work = power * delta # Work in Joules
-	print("old rpm: ", rpm)
-	rpm = _calculate_new_rpm(rpm, net_tq, delta)
-	print("tq: ", tq)
-	print("new rpm: ", rpm)
-	print("power: ", power / 1000)
-	print("-----------------")
-	return max(work, 0)
+func update_engine_state(throttle: float, external_load: float, delta: float):
+	var rpm = utils.rad_per_sec_to_rpm(omega)
+	tq = torque(torque_curve, rpm, throttle) # Torque in Nm.
+	var net_tq = tq * gear_ratios[current_gear] * final_drive - external_load
+	omega = _calculate_new_omega(omega, net_tq, delta)
+	#print("old rpm: ", rpm)
+	#print("tq: ", tq)
+	#print("new rpm: ", utils.rad_per_sec_to_rpm(omega))
+	#print("-----------------")
 
 
 func upshift():
 	var new_gear = clamp(current_gear + 1, 0, gear_ratios.size() - 1)
-	var new_rpm = rpm * gear_ratios[new_gear] / gear_ratios[current_gear]
+	omega *= gear_ratios[new_gear] / gear_ratios[current_gear]
 	current_gear = new_gear
-	rpm = new_rpm
 	print("UPSHIFT ", current_gear + 1)
-	
 
 
 func downshift():
 	var new_gear = clamp(current_gear - 1, 0, gear_ratios.size() - 1)
-	var new_rpm = rpm * gear_ratios[new_gear] / gear_ratios[current_gear]
+	omega *= gear_ratios[new_gear] / gear_ratios[current_gear]
 	current_gear = new_gear
-	rpm = new_rpm
 	print("DOWNSHIFT ", current_gear + 1)
 
 '''
@@ -64,7 +60,7 @@ loss from the drivetrain (gearbox etc) is assumed to be accounted for in the cur
 and doesn't need to be deducted.
 External load (rolling resistance, air resistance etc) must be subtracted on the calling side.
 '''
-func _calculate_torque(torque_curve: Dictionary, rpm: int, throttle: float) -> float:
+func torque(torque_curve: Dictionary, rpm: int, throttle: float) -> float:
 	if throttle > 1 || throttle < 0:
 		# TODO how to properly handle errors?
 		print("Throttle must be between 0 and 1")
@@ -123,32 +119,31 @@ func _calculate_torque(torque_curve: Dictionary, rpm: int, throttle: float) -> f
 
 
 '''
-Takes torque in Nm and engine speed in RPM.
-Returns power in kW.
+Returns current power output in Watts.
 '''
-func _calculate_power(tq: float, rpm: float) -> float:
-	# Convert engine speed to rad/s.
-	var omega = 2 * PI * rpm / 60
+func power() -> float:
 	return tq * omega
 
 
 '''
-rpm: engine speed in rpm
+Returns the angular velocity of the wheels based on the current speed of the engine
+and the gear ratios.
+'''
+func wheel_omega():
+	return omega / (gear_ratios[current_gear] * final_drive)
+
+
+'''
+omega: engine speed in rad/s
 tq: net torque of the engine (assuming external load is already subtracted)
 delta: time elapsed since last physics update in seconds
 Returns the new RPM of the engine.
 '''
-func _calculate_new_rpm(rpm: float, tq: float, delta: float) -> float:
-	var omega = 2 * PI * rpm / 60 # Engine speed in rad/s.
+func _calculate_new_omega(omega: float, tq: float, delta: float) -> float:
 	var angular_acceleration = tq / MOMENT_OF_INERTIA
 	var new_omega = omega + angular_acceleration * delta
-	var new_rpm = new_omega * 60 / (2 * PI) # New engine speed in rpm.
-	#print("rpm: ", rpm)
-	#print("omega: ", omega)
-	#print("angular_acceleration: ", angular_acceleration)
-	#print("new_omega: ", new_omega)
-	#print("new_rpm: ", new_rpm)
-	return clamp(new_rpm, 0, rpm_limit)
+	return clamp(new_omega, 0, utils.rpm_to_rad_per_sec(rpm_limit))
+
 
 '''
 Find the last element in an array that is smaller than the specified value.
